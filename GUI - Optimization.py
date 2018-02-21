@@ -1,5 +1,10 @@
 import Tkinter as tk
 
+scriptsPath = "F:/World Cup/2018 - Mania 7K/Stream/Scripts/"
+flagsPath = "F:/World Cup/2018 - Mania 7K/Stream/Scripts/Flags/"
+playersPath = "F:/World Cup/2018 - Mania 7K/Stream/Scripts/Country Players/"
+matchesPath = "F:/World Cup/2018 - Mania 7K/Stream/Scripts/Matches/"
+
 def countryName(color, country):
 
     # Creates the country.txt files
@@ -14,8 +19,8 @@ def countryName(color, country):
 def flagLocation(color, country):
 
     # Sets source and destination vars for red and blue flag input
-    flagSource = "F:/World Cup/2018 - Mania 7K/Stream/Scripts/Flags/" + country + ".png"
-    flagDestination = "F:/World Cup/2018 - Mania 7K/Stream/Scripts/" + color + "_flag.png"
+    flagSource = flagsPath + country + ".png"
+    flagDestination = scriptsPath + color + "_flag.png"
 
     import shutil
 
@@ -25,7 +30,7 @@ def flagLocation(color, country):
 def playerLists(color, country):
 
     # Adds user_input .txt into memory
-    playerList = file("F:/World Cup/2018 - Mania 7K/Stream/Scripts/Country Players/" + country + ".txt", "r")
+    playerList = file(playersPath + country + ".txt", "r")
 
     # Reads the lines in the .txt and inputs it into var
     playerData = playerList.readlines()
@@ -46,8 +51,8 @@ def playerLists(color, country):
 def runList(match):
 
     # Sets source and destination vars for selected match
-    sourceMatch = "F:/World Cup/2018 - Mania 7K/Stream/Scripts/Matches/" + match + ".png"
-    destinationMatch = "F:/World Cup/2018 - Mania 7K/Stream/Scripts/current_match.png"
+    sourceMatch = matchesPath + match + ".png"
+    destinationMatch = scriptsPath + "current_match.png"
 
     import shutil
 
