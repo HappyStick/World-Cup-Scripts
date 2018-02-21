@@ -1,3 +1,6 @@
+import shutil
+import Tkinter as tk
+
 def country_name():
 
     # Asks for user input of Country Names
@@ -25,7 +28,6 @@ def flag_location():
     source_blue = "F:/World Cup/2018 - Mania 7K/Stream/Scripts/Flags/" + selectedCountry2.get() + ".png"
     destination_blue = "F:/World Cup/2018 - Mania 7K/Stream/Scripts/blue_flag.png"
 
-    import shutil
 
     # Does the actual copying over
     shutil.copyfile(source_red, destination_red)
@@ -94,7 +96,6 @@ def runList():
     sourceMatch = "F:/World Cup/2018 - Mania 7K/Stream/Scripts/Matches/" + selectedMatch.get() + ".png"
     destinationMatch = "F:/World Cup/2018 - Mania 7K/Stream/Scripts/current_match.png"
 
-    import shutil
 
     # Does the actual copying over
     shutil.copyfile(sourceMatch, destinationMatch)
@@ -106,7 +107,6 @@ def multiBtn():
     player_list()
     runList()
 
-import Tkinter as tk
 
 root = tk.Tk()
 
