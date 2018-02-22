@@ -1,4 +1,5 @@
 import Tkinter as tk
+import shutil
 
 scriptsPath = "F:/World Cup/2018 - Mania 7K/Stream/Scripts/"
 flagsPath = "F:/World Cup/2018 - Mania 7K/Stream/Scripts/Flags/"
@@ -22,8 +23,6 @@ def flagLocation(color, country):
     flagSource = flagsPath + country + ".png"
     flagDestination = scriptsPath + color + "_flag.png"
 
-    import shutil
-
     # Does the actual copying over
     shutil.copyfile(flagSource, flagDestination)
 
@@ -37,6 +36,7 @@ def playerLists(color, country):
 
     # For entries 0 - 3 creates player(number).txt reading one line from player_data at a time
     for number in range(4):
+        # Ensures that if a country has less than 4 players it creates an empty .txt for each slot
         if number < len(playerData):
             player = playerData[number]
 
@@ -59,8 +59,6 @@ def runList(match):
     # Sets source and destination vars for selected match
     sourceMatch = matchesPath + match + ".png"
     destinationMatch = scriptsPath + "current_match.png"
-
-    import shutil
 
     # Does the actual copying over
     shutil.copyfile(sourceMatch, destinationMatch)
