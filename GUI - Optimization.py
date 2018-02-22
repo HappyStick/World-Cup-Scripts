@@ -37,16 +37,22 @@ def playerLists(color, country):
 
     # For entries 0 - 3 creates player(number).txt reading one line from player_data at a time
     for number in range(4):
-        player = playerData[number]
+        if number < len(playerData):
+            player = playerData[number]
 
-        playerName = open(color + "_player" + str(number + 1) + ".txt", "w+")
+            playerName = open(color + "_player" + str(number + 1) + ".txt", "w+")
 
-        playerName.write(player)
+            playerName.write(player)
+            
+            playerName.close()
+        else:
+            emptyPlayer = open(color + "_player" + str(number + 1) + ".txt", "w+")
 
-    # Closes the above
+            emptyPlayer.write("")
+
+            emptyPlayer.close()
+
     playerList.close()
-
-    playerName.close()
 
 def runList(match):
 
