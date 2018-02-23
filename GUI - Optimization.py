@@ -1,4 +1,5 @@
-import Tkinter as tk
+import tkinter as tk
+
 import shutil
 
 scriptsPath = "F:/World Cup/2018 - Mania 7K/Stream/Scripts/"
@@ -9,7 +10,7 @@ matchesPath = "F:/World Cup/2018 - Mania 7K/Stream/Scripts/Matches/"
 def countryName(color, country):
 
     # Creates the country.txt files
-    countryFile = open("country_file_" + color + ".txt", "w+")
+    countryFile = open(scriptsPath + "country_file_" + color + ".txt", 'w')
 
     # Writes the user input into the above .txt
     countryFile.write(country)
@@ -29,7 +30,7 @@ def flagLocation(color, country):
 def playerLists(color, country):
 
     # Adds user_input .txt into memory
-    playerList = file(playersPath + country + ".txt", "r")
+    playerList = open(playersPath + country + ".txt", "r")
 
     # Reads the lines in the .txt and inputs it into var
     playerData = playerList.readlines()
@@ -40,13 +41,13 @@ def playerLists(color, country):
         if number < len(playerData):
             player = playerData[number]
 
-            playerName = open(color + "_player" + str(number + 1) + ".txt", "w+")
+            playerName = open(scriptsPath + color + "_player" + str(number + 1) + ".txt", "w+")
 
             playerName.write(player)
             
             playerName.close()
         else:
-            emptyPlayer = open(color + "_player" + str(number + 1) + ".txt", "w+")
+            emptyPlayer = open(scriptsPath + color + "_player" + str(number + 1) + ".txt", "w+")
 
             emptyPlayer.write("")
 
@@ -65,6 +66,7 @@ def runList(match):
 
 # custom function to allow multiple functions in the button
 def multiBtn():
+
     countryName("red", selectedCountry.get())
     countryName("blue", selectedCountry2.get())
 
@@ -120,5 +122,3 @@ runBtn = tk.Button(root, text="Run", command=multiBtn)
 runBtn.pack(side=tk.BOTTOM)
 
 root.mainloop()
-
-
