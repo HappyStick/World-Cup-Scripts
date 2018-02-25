@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import messagebox
 import shutil
 import os
 
@@ -11,7 +12,7 @@ applicationsPath = 'F:/World Cup/2018 - Mania 7K/Stream/Scripts/Applications/'
 def countryName(color, country):
 
     # Creates the country.txt files
-    countryFile = open(scriptsPath + 'country_file_' + color + '.txt', 'w')
+    countryFile = open('{0}country_file_{1}.txt'.format(scriptsPath, color), 'w')
 
     # Writes the user input into the above .txt
     countryFile.write(country)
@@ -22,8 +23,8 @@ def countryName(color, country):
 def flagLocation(color, country):
 
     # Sets source and destination vars for red and blue flag input
-    flagSource = flagsPath + country + '.png'
-    flagDestination = scriptsPath + color + '_flag.png'
+    flagSource = '{0}{1}.png'.format(flagsPath, country)
+    flagDestination = '{0}{1}_flag.png'.format(scriptsPath, color)
 
     # Does the actual copying over
     shutil.copyfile(flagSource, flagDestination)
@@ -31,7 +32,7 @@ def flagLocation(color, country):
 def playerLists(color, country):
 
     # Adds user_input .txt into memory
-    playerList = open(playersPath + country + '.txt', 'r')
+    playerList = open('{0}{1}.txt'.format(playersPath, country), 'r')
 
     # Reads the lines in the .txt and inputs it into var
     playerData = playerList.readlines()
@@ -42,13 +43,13 @@ def playerLists(color, country):
         if number < len(playerData):
             player = playerData[number]
 
-            playerName = open(scriptsPath + color + '_player' + str(number + 1) + '.txt', 'w+')
+            playerName = open('{0}{1}_player{2}.txt', format(scriptsPath, color, str(number + 1)), 'w+')
 
             playerName.write(player)
             
             playerName.close()
         else:
-            emptyPlayer = open(scriptsPath + color + '_player' + str(number + 1) + '.txt', 'w+')
+            emptyPlayer = open('{0}{1}_player{2}.txt'.format(scriptsPath, color, str(number + 1)), 'w+')
 
             emptyPlayer.write('')
 
@@ -59,20 +60,28 @@ def playerLists(color, country):
 def runList(match):
 
     # Sets source and destination vars for selected match
-    sourceMatch = matchesPath + match + '.png'
-    destinationMatch = scriptsPath + 'current_match.png'
+    sourceMatch = '{0}{1}.png'.format(matchesPath, match)
+    destinationMatch = '{0}current_match.png'.format(scriptsPath)
 
     # Does the actual copying over
     shutil.copyfile(sourceMatch, destinationMatch)
 
 def programsOpen():
-
-    os.startfile(applicationsPath + 'obs64.lnk')
-    os.startfile(applicationsPath + 'Snaz.lnk')
-    os.startfile(applicationsPath + 'WCplaylist.lnk')
-    os.startfile(applicationsPath + 'Overview.lnk')
-    os.startfile(applicationsPath + 'SndVol.lnk')
-    os.startfile(applicationsPath + 'osu!.lnk')
+    programs = [
+      'obs64.lnk',
+      'Snaz.lnk',
+      'WCplaylist.lnk',
+      'Overview.lnk',
+      'SndVol.lnk',
+      'osu!.lnk',
+    ]
+    
+    try:
+        for p in programs:
+            os.startfile('{0}{1}'.format(applicationsPath, p))
+    except FileNotFoundError as e:
+        tk.messagebox.showerror("Error", "Program in list not found.\nError: {0}".format(e))
+        
 
 # custom function to allow multiple functions in the button
 def multiBtn():
