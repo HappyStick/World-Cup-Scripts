@@ -9,6 +9,7 @@ playersPath = 'F:/World Cup/2018 - Mania 7K/Stream/Scripts/Country Players/'
 matchesPath = 'F:/World Cup/2018 - Mania 7K/Stream/Scripts/Matches/'
 applicationsPath = 'F:/World Cup/2018 - Mania 7K/Stream/Scripts/Applications/'
 
+
 def countryName(color, country):
 
     # Creates the country.txt files
@@ -20,6 +21,7 @@ def countryName(color, country):
     # Closes the file
     countryFile.close()
 
+
 def flagLocation(color, country):
 
     # Sets source and destination vars for red and blue flag input
@@ -28,6 +30,7 @@ def flagLocation(color, country):
 
     # Does the actual copying over
     shutil.copyfile(flagSource, flagDestination)
+
 
 def playerLists(color, country):
 
@@ -46,7 +49,7 @@ def playerLists(color, country):
             playerName = open('{0}{1}_player{2}.txt'.format(scriptsPath, color, str(number + 1)), 'w+')
 
             playerName.write(player)
-            
+
             playerName.close()
         else:
             emptyPlayer = open('{0}{1}_player{2}.txt'.format(scriptsPath, color, str(number + 1)), 'w+')
@@ -57,6 +60,7 @@ def playerLists(color, country):
 
     playerList.close()
 
+
 def runList(match):
 
     # Sets source and destination vars for selected match
@@ -65,6 +69,7 @@ def runList(match):
 
     # Does the actual copying over
     shutil.copyfile(sourceMatch, destinationMatch)
+
 
 def programsOpen():
     programs = [
@@ -75,13 +80,13 @@ def programsOpen():
       'SndVol.lnk',
       'osu!.lnk',
     ]
-    
+
     try:
         for p in programs:
             os.startfile('{0}{1}'.format(applicationsPath, p))
     except FileNotFoundError as e:
         tk.messagebox.showerror("Error", "Program in list not found.\nError: {0}".format(e))
-        
+
 
 # custom function to allow multiple functions in the button
 def multiBtn():
@@ -96,6 +101,7 @@ def multiBtn():
     playerLists('blue', selectedCountry2.get())
 
     runList(selectedMatch.get())
+
 
 def openBtn():
 
