@@ -43,7 +43,7 @@ def playerLists(color, country):
         if number < len(playerData):
             player = playerData[number]
 
-            playerName = open('{0}{1}_player{2}.txt', format(scriptsPath, color, str(number + 1)), 'w+')
+            playerName = open('{0}{1}_player{2}.txt'.format(scriptsPath, color, str(number + 1)), 'w+')
 
             playerName.write(player)
             
