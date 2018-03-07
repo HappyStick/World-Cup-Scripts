@@ -20,19 +20,27 @@ def countryName(color, country):
     countryFile.close()
 
 
+<<<<<<< HEAD
 def flagLocation(color, country):
 
     # Sets source and destination vars for red and blue flag input and copies
     # it over
+=======
+    # Sets source and destination vars for red and blue flag input and copies it over
+>>>>>>> upstream/master
     flagSource = (f'{flagsPath}{country}.png')
     flagDestination = (f'{scriptsPath}{color}_flag.png')
     shutil.copyfile(flagSource, flagDestination)
 
 
+<<<<<<< HEAD
 def playerLists(color, country):
 
     # Adds user_input .txt into memory then reads the lines in the .txt and
     # inputs it into var
+=======
+    # Adds user_input .txt into memory then reads the lines in the .txt and inputs it into var
+>>>>>>> upstream/master
     playerList = open((f'{playersPath}{country}.txt'), 'r')
     playerData = playerList.readlines()
 
@@ -44,19 +52,27 @@ def playerLists(color, country):
         if number < len(playerData):
             player = playerData[number]
 
+<<<<<<< HEAD
             playerName = open(
                 (f'{scriptsPath}{color}_player{str(number + 1)}.txt'),
                 'w+'
             )
+=======
+            playerName = open((f'{scriptsPath}{color}_player{str(number + 1)}.txt'), 'w+')
+>>>>>>> upstream/master
 
             playerName.write(player)
 
             playerName.close()
         else:
+<<<<<<< HEAD
             emptyPlayer = open(
                 (f'{scriptsPath}{color}_player{str(number + 1)}.txt'),
                 'w+'
             )
+=======
+            emptyPlayer = open((f'{scriptsPath}{color}_player{str(number + 1)}.txt'), 'w+')
+>>>>>>> upstream/master
 
             emptyPlayer.write('')
 
@@ -65,14 +81,20 @@ def playerLists(color, country):
     playerList.close()
 
 
+<<<<<<< HEAD
 def runList(match):
 
+=======
+>>>>>>> upstream/master
     # Sets source and destination vars for selected match and copies it over
     sourceMatch = (f'{matchesPath}{match}.png')
     destinationMatch = (f'{scriptsPath}current_match.png')
     shutil.copyfile(sourceMatch, destinationMatch)
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> upstream/master
 # custom function to allow multiple functions in the button
 def multiBtn():
     # Countries
@@ -103,6 +125,7 @@ teamLabelBlue.pack(side=tk.RIGHT)
 matchLabel = tk.Label(root, text='Match Number')
 matchLabel.pack(side=tk.TOP)
 
+<<<<<<< HEAD
 countryList = [
     'Argentina',
     'Australia',
@@ -121,6 +144,9 @@ countryList = [
     'South Korea',
     'United States'
 ]
+=======
+countryList = ['Argentina', 'Australia', 'Brazil', 'Canada', 'Chile', 'China', 'France', 'Germany', 'Indonesia', 'Italy', 'Japan', 'Malaysia', 'Philippines', 'Singapore', 'South Korea', 'United States']
+>>>>>>> upstream/master
 matchList = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
 
 # Creates the var and initial selected variable in the list we're creating
