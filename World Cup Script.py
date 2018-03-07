@@ -1,7 +1,5 @@
 import tkinter as tk
-from tkinter import messagebox
 import shutil
-import os
 
 scriptsPath = 'F:/World Cup/2018 - Mania 7K/Stream/Scripts/'
 flagsPath = 'F:/World Cup/2018 - Mania 7K/Stream/Scripts/Flags/'
@@ -13,7 +11,7 @@ applicationsPath = 'F:/World Cup/2018 - Mania 7K/Stream/Scripts/Applications/'
 def countryName(color, country):
 
     # Creates the country.txt files
-    countryFile = open('{0}country_file_{1}.txt'.format(scriptsPath, color), 'w')
+    countryFile = open((f'{scriptsPath}country_file_{color}.txt'), 'w')
 
     # Writes the user input into the above .txt
     countryFile.write(country)
@@ -24,35 +22,41 @@ def countryName(color, country):
 
 def flagLocation(color, country):
 
-    # Sets source and destination vars for red and blue flag input
-    flagSource = '{0}{1}.png'.format(flagsPath, country)
-    flagDestination = '{0}{1}_flag.png'.format(scriptsPath, color)
-
-    # Does the actual copying over
+    # Sets source and destination vars for red and blue flag input and copies
+    # it over
+    flagSource = (f'{flagsPath}{country}.png')
+    flagDestination = (f'{scriptsPath}{color}_flag.png')
     shutil.copyfile(flagSource, flagDestination)
 
 
 def playerLists(color, country):
 
-    # Adds user_input .txt into memory
-    playerList = open('{0}{1}.txt'.format(playersPath, country), 'r')
-
-    # Reads the lines in the .txt and inputs it into var
+    # Adds user_input .txt into memory then reads the lines in the .txt and
+    # inputs it into var
+    playerList = open((f'{playersPath}{country}.txt'), 'r')
     playerData = playerList.readlines()
 
-    # For entries 0 - 3 creates player(number).txt reading one line from player_data at a time
+    # For entries 0 - 3 creates player(number).txt reading one line from
+    # player_data at a time
     for number in range(4):
-        # Ensures that if a country has less than 4 players it creates an empty .txt for each slot
+        # Ensures that if a country has less than 4 players it creates an empty
+        # .txt for each slot
         if number < len(playerData):
             player = playerData[number]
 
-            playerName = open('{0}{1}_player{2}.txt'.format(scriptsPath, color, str(number + 1)), 'w+')
+            playerName = open(
+                (f'{scriptsPath}{color}_player{str(number + 1)}.txt'),
+                'w+'
+            )
 
             playerName.write(player)
 
             playerName.close()
         else:
-            emptyPlayer = open('{0}{1}_player{2}.txt'.format(scriptsPath, color, str(number + 1)), 'w+')
+            emptyPlayer = open(
+                (f'{scriptsPath}{color}_player{str(number + 1)}.txt'),
+                'w+'
+            )
 
             emptyPlayer.write('')
 
@@ -63,49 +67,25 @@ def playerLists(color, country):
 
 def runList(match):
 
-    # Sets source and destination vars for selected match
-    sourceMatch = '{0}{1}.png'.format(matchesPath, match)
-    destinationMatch = '{0}current_match.png'.format(scriptsPath)
-
-    # Does the actual copying over
+    # Sets source and destination vars for selected match and copies it over
+    sourceMatch = (f'{matchesPath}{match}.png')
+    destinationMatch = (f'{scriptsPath}current_match.png')
     shutil.copyfile(sourceMatch, destinationMatch)
-
-
-def programsOpen():
-    programs = [
-      'obs64.lnk',
-      'Snaz.lnk',
-      'WCplaylist.lnk',
-      'Overview.lnk',
-      'SndVol.lnk',
-      'osu!.lnk',
-    ]
-
-    try:
-        for p in programs:
-            os.startfile('{0}{1}'.format(applicationsPath, p))
-    except FileNotFoundError as e:
-        tk.messagebox.showerror("Error", "Program in list not found.\nError: {0}".format(e))
 
 
 # custom function to allow multiple functions in the button
 def multiBtn():
-
+    # Countries
     countryName('red', selectedCountry.get())
     countryName('blue', selectedCountry2.get())
-
+    # Flags
     flagLocation('red', selectedCountry.get())
     flagLocation('blue', selectedCountry2.get())
-
+    # Players
     playerLists('red', selectedCountry.get())
     playerLists('blue', selectedCountry2.get())
 
     runList(selectedMatch.get())
-
-
-def openBtn():
-
-    programsOpen()
 
 root = tk.Tk()
 
@@ -123,8 +103,25 @@ teamLabelBlue.pack(side=tk.RIGHT)
 matchLabel = tk.Label(root, text='Match Number')
 matchLabel.pack(side=tk.TOP)
 
-countryList = ['Argentina', 'Australia', 'Brazil', 'Canada', 'Chile', 'China', 'France', 'Germany', 'Indonesia', 'Italy', 'Japan', 'Malaysia', 'Philippines', 'Singapore', 'South Korea', 'United States']
-matchList = ['1', '2', '3', '4', '5', '6', '7', '8']
+countryList = [
+    'Argentina',
+    'Australia',
+    'Brazil',
+    'Canada',
+    'Chile',
+    'China',
+    'France',
+    'Germany',
+    'Indonesia',
+    'Italy',
+    'Japan',
+    'Malaysia',
+    'Philippines',
+    'Singapore',
+    'South Korea',
+    'United States'
+]
+matchList = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
 
 # Creates the var and initial selected variable in the list we're creating
 selectedCountry = tk.StringVar()
@@ -145,10 +142,6 @@ countryMenu2.pack(side=tk.RIGHT)
 
 matchMenu = tk.OptionMenu(root, selectedMatch, *matchList)
 matchMenu.pack(side=tk.TOP)
-
-# Create the button for opening programs
-openBtn = tk.Button(root, text="Open Needed Applications", command=openBtn)
-openBtn.pack(side=tk.BOTTOM)
 
 # Create the button that runs most code
 runBtn = tk.Button(root, text="Run", command=multiBtn)
