@@ -48,13 +48,20 @@ def playerLists(color, country):
 
     playerList.close()
 
+# Writes the match time in matchTime.txt
 def matchTimes(month, day, time):
 
     matchFile = open((f'{scriptsPath}matchTime.txt'), 'w')
     matchFile.write((f'{day} {month} {time} UTC'))
     matchFile.close()
 
-# custom function to allow multiple functions in the button
+def roundNames(roundName):
+
+    roundFile = open((f'{scriptsPath}roundName.txt'), 'w')
+    roundFile.write((f'{roundName}'))
+    roundFile.close()
+
+# Allows multiple functions in the button
 def multiBtn():
 
     countryName('red', selectedCountry.get())
@@ -67,6 +74,8 @@ def multiBtn():
     playerLists('blue', selectedCountry2.get())
 
     matchTimes(selectedMonth.get(), str(selectedDay.get()), selectedTime.get())
+
+    roundNames(selectedRound.get())
 
 root = tk.Tk()
 
@@ -85,6 +94,8 @@ countryList = ['Argentina', 'Australia', 'Brazil', 'Canada', 'Chile', 'China', '
 monthList = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 dayList = range(1, 32)
 timeList = []
+
+# Creates a list with a format of 00:00, 00:30, 01:30, etc.
 for number in range(0, 48):
     hours = math.floor(number/2)
     mins = number % 2
@@ -106,6 +117,9 @@ selectedDay.set(dayList[0])
 selectedTime = tk.StringVar()
 selectedTime.set(timeList[0])
 
+selectedRound = tk.StringVar()
+selectedRound.set('Round Name')
+
 # Creates an optionmenu in below vars with root, selection and list
 countryMenu = tk.OptionMenu(root, selectedCountry, *countryList)
 countryMenu.pack(side=tk.LEFT)
@@ -121,6 +135,9 @@ dayMenu.pack(side=tk.TOP)
 
 timeMenu = tk.OptionMenu(root, selectedTime, *timeList)
 timeMenu.pack(side=tk.TOP)
+
+roundInput = tk.Entry(root, textvariable=selectedRound)
+roundInput.pack(side=tk.TOP)
 
 # Create the button that runs most code
 runBtn = tk.Button(root, text="Run", command=multiBtn)
