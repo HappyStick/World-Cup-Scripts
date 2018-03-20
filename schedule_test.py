@@ -27,7 +27,7 @@ def schedule(matches):
     match_time_text.close()
 
 
-# Creates var count instances of frames with Match #, Team 1 and 2
+# Creates var count instances of frames with Match #, Team 1 / 2 and time
 def frames(count):
 
     frame = tk.Frame(root)
@@ -40,7 +40,10 @@ def frames(count):
     country_menu.pack(side = tk.LEFT)
 
     country_menu = tk.OptionMenu(frame, selected_country_list[count * 2 + 1], *country_list)
-    country_menu.pack(side = tk.RIGHT)
+    country_menu.pack(side = tk.LEFT)
+
+    time_box = tk.Entry(frame, textvariable = time_input_list[count + 1], width = '6')
+    time_box.pack(side = tk.RIGHT)
 
 # Runs code after new inputs are filled in
 def run_button():
@@ -51,18 +54,28 @@ def run_button():
 
         frame_count = frame_count + 1
 
-        matches = match(f'{frame_count}', selected_country_list[count * 2].get(), selected_country_list[count * 2 + 1].get(), '08:00')
+        matches = match(f'{frame_count}', selected_country_list[count * 2].get(), selected_country_list[count * 2 + 1].get(), time_input_list[count + 1].get())
 
         schedule(matches)
-
-country_list = ['None', 'USA', 'AUS', 'CHN', 'KOR']
 
 root = tk.Tk()
 
 root.title('OBS Schedule Tool')
 root.geometry('500x500')
 
+country_list = ['None', 'USA', 'AUS', 'CHN', 'KOR']
+time_list = ['00:00']
+
+
 selected_country_list = []
+time_input_list = []
+
+# Creates 12 iterations of time_input to be used by frames() at initial runtime
+for numbers in range(0,13):
+
+    time_input = tk.StringVar()
+    time_input.set(time_list[0])
+    time_input_list.append(time_input)
 
 # Creates 24 iterations of selected_country to be used by frames() at initial runtime
 for numbers in range(0,24):
@@ -71,9 +84,6 @@ for numbers in range(0,24):
     selected_country.set(country_list[0])
     selected_country_list.append(selected_country)
 
-run_button = tk.Button(root, text = "Run", command = run_button)
-run_button.pack(side = tk.BOTTOM)
-
 # Creates frame count for frames()
 frame_count = 0
 
@@ -81,6 +91,9 @@ for count in range(0,12):
 
     frame_count = frame_count + 1
     frames(count)
+
+run_button = tk.Button(root, text = "Run", command = run_button)
+run_button.pack(side = tk.BOTTOM)
 
 root.mainloop()
 
