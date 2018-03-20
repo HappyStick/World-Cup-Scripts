@@ -17,22 +17,43 @@ class match:
         self.match_time = match_time
 
 # Copies over the flags and outputs time into .txt
-def schedule(match):
+def schedule(matches):
 
-    copyfile(f'{flags_path}{match.team_1}.png', f'{schedule_output_path}{match.number}_flag_1.png')
-    copyfile(f'{flags_path}{match.team_2}.png', f'{schedule_output_path}{match.number}_flag_2.png')
+    copyfile(f'{flags_path}{matches.team_1}.png', f'{schedule_output_path}{matches.number}_flag_1.png')
+    copyfile(f'{flags_path}{matches.team_2}.png', f'{schedule_output_path}{matches.number}_flag_2.png')
 
-    match_time_text = open(f'{schedule_output_path}{match.number}_time.txt', 'w')
-    match_time_text.write(f'{match.match_time} UTC')
+    match_time_text = open(f'{schedule_output_path}{matches.number}_time.txt', 'w')
+    match_time_text.write(f'{matches.match_time} UTC')
     match_time_text.close()
 
+
+# Creates var count instances of frames with Match #, Team 1 and 2
+def frames(count):
+
+    frame = tk.Frame(root)
+    frame.pack()
+
+    match_label = tk.Label(frame, text = f'Match {frame_count}')
+    match_label.pack(side = tk.LEFT)
+
+    country_menu = tk.OptionMenu(frame, selected_country_list[count * 2], *country_list)
+    country_menu.pack(side = tk.LEFT)
+
+    country_menu = tk.OptionMenu(frame, selected_country_list[count * 2 + 1], *country_list)
+    country_menu.pack(side = tk.RIGHT)
+
+# Runs code after new inputs are filled in
 def run_button():
 
-    match_1 = match('1', selected_country_1.get(), selected_country_2.get() , '08:00')
-    match_2 = match('2', selected_country_3.get(), selected_country_4.get() , '10:00')
-    
-    schedule(match_1)
-    schedule(match_2)
+    frame_count = 0
+
+    for count in range(0,12):
+
+        frame_count = frame_count + 1
+
+        matches = match(f'{frame_count}', selected_country_list[count * 2].get(), selected_country_list[count * 2 + 1].get(), '08:00')
+
+        schedule(matches)
 
 country_list = ['None', 'USA', 'AUS', 'CHN', 'KOR']
 
@@ -41,44 +62,25 @@ root = tk.Tk()
 root.title('OBS Schedule Tool')
 root.geometry('500x500')
 
-selected_country_1 = tk.StringVar()
-selected_country_1.set(country_list[0])
+selected_country_list = []
 
-selected_country_2 = tk.StringVar()
-selected_country_2.set(country_list[0])
+# Creates 24 iterations of selected_country to be used by frames() at initial runtime
+for numbers in range(0,24):
 
-selected_country_3 = tk.StringVar()
-selected_country_3.set(country_list[0])
-
-selected_country_4 = tk.StringVar()
-selected_country_4.set(country_list[0])
-
-frame_1 = tk.Frame(root)
-frame_1.pack()
-
-match_label_1 = tk.Label(frame_1, text = 'Match 1')
-match_label_1.pack(side = tk.LEFT)
-
-country_menu_1 = tk.OptionMenu(frame_1, selected_country_1, *country_list)
-country_menu_1.pack(side = tk.LEFT)
-
-country_menu_2 = tk.OptionMenu(frame_1, selected_country_2, *country_list)
-country_menu_2.pack(side = tk.RIGHT)
-
-frame_2 = tk.Frame(root)
-frame_2.pack()
-
-match_label_2 = tk.Label(frame_2, text = 'Match 2')
-match_label_2.pack(side = tk.LEFT)
-
-country_menu_3 = tk.OptionMenu(frame_2, selected_country_3, *country_list)
-country_menu_3.pack(side = tk.LEFT)
-
-country_menu_4 = tk.OptionMenu(frame_2, selected_country_4, *country_list)
-country_menu_4.pack(side = tk.RIGHT)
+    selected_country = tk.StringVar()
+    selected_country.set(country_list[0])
+    selected_country_list.append(selected_country)
 
 run_button = tk.Button(root, text = "Run", command = run_button)
 run_button.pack(side = tk.BOTTOM)
+
+# Creates frame count for frames()
+frame_count = 0
+
+for count in range(0,12):
+
+    frame_count = frame_count + 1
+    frames(count)
 
 root.mainloop()
 
