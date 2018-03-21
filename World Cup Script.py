@@ -8,45 +8,60 @@ playersPath = 'F:/World Cup/2018 - Mania 7K/Stream/Scripts/Country Players/'
 matchesPath = 'F:/World Cup/2018 - Mania 7K/Stream/Scripts/Matches/'
 applicationsPath = 'F:/World Cup/2018 - Mania 7K/Stream/Scripts/Applications/'
 
+
 def countryName(color, country):
 
-    # Creates the country.txt files, writes user input into the .txt and closes it
+    # Creates the country.txt files, writes user input into the .txt and closes
+	# it
     countryFile = open((f'{scriptsPath}country_file_{color}.txt'), 'w')
     countryFile.write(country)
     countryFile.close()
 
+
 def flagLocation(color, country):
 
-    # Sets source and destination vars for red and blue flag input and copies it over
+    # Sets source and destination vars for red and blue flag input and copies
+    # it over
     flagSource = (f'{flagsPath}{country}.png')
     flagDestination = (f'{scriptsPath}{color}_flag.png')
     shutil.copyfile(flagSource, flagDestination)
 
+
 def playerLists(color, country):
 
-    # Adds user_input .txt into memory then reads the lines in the .txt and inputs it into var
+    # Adds user_input .txt into memory then reads the lines in the .txt and
+    # inputs it into var
     playerList = open((f'{playersPath}{country}.txt'), 'r')
     playerData = playerList.readlines()
 
-    # For entries 0 - 3 creates player(number).txt reading one line from player_data at a time
+    # For entries 0 - 3 creates player(number).txt reading one line from
+    # player_data at a time
     for number in range(4):
-        # Ensures that if a country has less than 4 players it creates an empty .txt for each slot
+        # Ensures that if a country has less than 4 players it creates an empty
+        # .txt for each slot
         if number < len(playerData):
             player = playerData[number]
 
-            playerName = open((f'{scriptsPath}{color}_player{str(number + 1)}.txt'), 'w+')
+            playerName = open(
+                (f'{scriptsPath}{color}_player{str(number + 1)}.txt'),
+                'w+'
+            )
 
             playerName.write(player)
-            
+
             playerName.close()
         else:
-            emptyPlayer = open((f'{scriptsPath}{color}_player{str(number + 1)}.txt'), 'w+')
+            emptyPlayer = open(
+                (f'{scriptsPath}{color}_player{str(number + 1)}.txt'),
+                'w+'
+            )
 
             emptyPlayer.write('')
 
             emptyPlayer.close()
 
     playerList.close()
+
 
 # Writes the match time in matchTime.txt
 def matchTimes(month, day, time):
@@ -55,21 +70,23 @@ def matchTimes(month, day, time):
     matchFile.write((f'{day} {month} {time} UTC'))
     matchFile.close()
 
+
 def roundNames(roundName):
 
     roundFile = open((f'{scriptsPath}roundName.txt'), 'w')
     roundFile.write((f'{roundName}'))
     roundFile.close()
 
+
 # Allows multiple functions in the button
 def multiBtn():
-
+    # Countries
     countryName('red', selectedCountry.get())
     countryName('blue', selectedCountry2.get())
-
+    # Flags
     flagLocation('red', selectedCountry.get())
     flagLocation('blue', selectedCountry2.get())
-
+    # Players
     playerLists('red', selectedCountry.get())
     playerLists('blue', selectedCountry2.get())
 
@@ -90,8 +107,38 @@ teamLabelRed.pack(side=tk.LEFT)
 teamLabelBlue = tk.Label(root, text='Team Blue')
 teamLabelBlue.pack(side=tk.RIGHT)
 
-countryList = ['Argentina', 'Australia', 'Brazil', 'Canada', 'Chile', 'China', 'France', 'Germany', 'Indonesia', 'Italy', 'Japan', 'Malaysia', 'Philippines', 'Singapore', 'South Korea', 'United States']
-monthList = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+countryList = [
+    'Argentina',
+    'Australia',
+    'Brazil',
+    'Canada',
+    'Chile',
+    'China',
+    'France',
+    'Germany',
+    'Indonesia',
+    'Italy',
+    'Japan',
+    'Malaysia',
+    'Philippines',
+    'Singapore',
+    'South Korea',
+    'United States'
+]
+monthList = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December'
+]
 dayList = range(1, 32)
 timeList = []
 
