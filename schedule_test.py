@@ -41,7 +41,7 @@ def schedule(matches):
         async def hide_2():
 
             await asyncio.sleep(0.01)
-            async with OBSWS("localhost", 4444, password as obsws:
+            async with OBSWS("localhost", 4444, password) as obsws:
                 await asyncio.wait( [
                     obsws.require(SetSourceRenderRequest(source=f"flag_{matches.number}", render=False, scene_name="Scene")),
                     obsws.require(SetSourceRenderRequest(source=f"flag_{matches.number}_{matches.number}", render=False, scene_name="Scene")),   
