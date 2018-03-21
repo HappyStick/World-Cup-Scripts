@@ -1,4 +1,5 @@
 import tkinter as tk
+import json
 
 from shutil import copyfile
 
@@ -22,9 +23,8 @@ def schedule(matches):
     copyfile(f'{flags_path}{matches.team_1}.png', f'{schedule_output_path}{matches.number}_flag_1.png')
     copyfile(f'{flags_path}{matches.team_2}.png', f'{schedule_output_path}{matches.number}_flag_2.png')
 
-    match_time_text = open(f'{schedule_output_path}{matches.number}_time.txt', 'w')
-    match_time_text.write(f'{matches.match_time} UTC')
-    match_time_text.close()
+    with open(f'{schedule_output_path}{matches.number}_time.txt', 'w') as match_time_text:
+        match_time_text.write(f'{matches.match_time} UTC')
 
 # Creates var count instances of frames with Match #, Team 1 / 2 and time
 def frames(count):
@@ -44,6 +44,27 @@ def frames(count):
     time_box = tk.Entry(frame, textvariable = time_input_list[count], width = '5')
     time_box.pack(side = tk.RIGHT)
 
+def save_button():
+
+    frame_count = 0
+
+    country_1 = []
+    country_2 = []
+    time_1 = []
+
+    for count in range(0, match_amount):
+
+        frame_count = frame_count + 1
+
+        country_1.append(selected_country_list[count * 2].get())
+        country_2.append(selected_country_list[count * 2 + 1].get())
+        time_1.append(time_input_list[count].get())
+
+    saved_vars = {"saved_vars" : [{"team_1" : country_1}, {"team_2" : country_2}, {"time" : time_1}]}
+    
+    with open(f'{script_path}savefile.json', 'w') as file:
+        json.dump(saved_vars, file, indent = 4)
+
 # Runs code after new inputs are filled in
 def run_button():
 
@@ -62,13 +83,22 @@ root = tk.Tk()
 root.title('OBS Schedule Tool')
 root.geometry('500x500')
 
-country_list = ['USA', 'AUS', 'CHN', 'KOR']
+#creates country_list based on schedule.json
+with open(f'{script_path}countries.json') as file:
+    country_data = json.load(file)
+
+country_list = []
+for countries in country_data['countries']:
+    country_list.append(countries['abbreviation'])
 time_list = ['00:00']
 
 selected_country_list = []
 time_input_list = []
 
 match_amount = int(input('Match count?:\n'))
+
+with open(f'{script_path}savefile.json') as file:
+    savedata = json.load(file)
 
 # Creates 12 iterations of time_input to be used by frames() at initial runtime
 for numbers in range(0, match_amount):
@@ -92,9 +122,11 @@ for count in range(0, match_amount):
     frame_count = frame_count + 1
     frames(count)
 
-run_btn = tk.Button(root, text = "Run", command = run_button)
+run_btn = tk.Button(root, text = 'Run', command = run_button)
 run_btn.pack(side = tk.BOTTOM)
 
-root.mainloop()
+save_btn = tk.Button(root, text = 'Save', command = save_button)
+save_btn.pack(side = tk.BOTTOM)
 
+root.mainloop()
 
