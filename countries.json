@@ -1,0 +1,24 @@
+{
+    "countries" : [
+        {
+            "abbreviation" : "AUS",
+            "full_name" : "Australia", 
+            "flag_file" : "AUS.png"
+        }, 
+        {
+            "abbreviation" : "CHN",
+            "full_name" : "China", 
+            "flag_file" : "CHN.png"
+        }, 
+        {
+            "abbreviation" : "KOR",
+            "full_name" : "South Korea", 
+            "flag_file" : "KOR.png"
+        }, 
+        {
+            "abbreviation" : "USA",
+            "full_name" : "United States", 
+            "flag_file" : "USA.png"
+        }
+    ]
+}
