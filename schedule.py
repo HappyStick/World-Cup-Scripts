@@ -41,7 +41,7 @@ def schedule(matches):
         async def hide_2():
 
             await asyncio.sleep(0.01)
-            async with OBSWS("localhost", 4444, password) as obsws:
+            async with OBSWS("localhost", 4444, "PIqDeb0q7QYCNunQUMyC") as obsws:
                 await asyncio.wait( [
                     obsws.require(SetSourceRenderRequest(source=f"flag_{matches.number}", render=False, scene_name="Scene")),
                     obsws.require(SetSourceRenderRequest(source=f"flag_{matches.number}_{matches.number}", render=False, scene_name="Scene")),   
@@ -62,7 +62,7 @@ def schedule(matches):
         async def unhide_2():
 
             await asyncio.sleep(0.01)
-            async with OBSWS("localhost", 4444, password) as obsws:
+            async with OBSWS("localhost", 4444, "PIqDeb0q7QYCNunQUMyC") as obsws:
                 await asyncio.wait( [
                     obsws.require(SetSourceRenderRequest(source=f"flag_{matches.number}", render=True, scene_name="Scene")),
                     obsws.require(SetSourceRenderRequest(source=f"flag_{matches.number}_{matches.number}", render=True, scene_name="Scene")),   
@@ -104,7 +104,7 @@ def frames(count):
     score_box = tk.Entry(frame, textvariable = score_input_list[count], width = "4")
     score_box.pack(side = tk.LEFT)
 
-    check_box_box = tk.Checkbutton(frame, variable = check_box_list[count])
+    check_box_box = tk.Checkbutton(frame, text = "Match Over", variable = check_box_list[count])
     check_box_box.pack(side = tk.RIGHT) 
 
 # Runs code after new inputs are filled in
