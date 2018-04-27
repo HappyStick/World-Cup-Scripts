@@ -9,6 +9,7 @@ root = tk.Tk()
 root.title("Mappool")
 root.geometry("500x500")
 
+#Copies over different files depending on drop down menu pick
 def picks(option, count):
 
     if selected_option_list[count].get() == "Unpicked":
@@ -27,6 +28,7 @@ def picks(option, count):
 
         copyfile(f"{maps_path}{count}_bw.png", f"{current_path}{count}_map.png")
 
+#Creates the appropriate amount of instances for the row of mods & map numbers
 def frames(count):
     
     frame = tk.Frame(root)
@@ -51,12 +53,14 @@ selected_option_list = []
 for numbers in range(0, 13):
     map_list.append(numbers)
 
+#Stores the selected option for each in a list
 for numbers in range(0, 13):
 
     selected_option = tk.StringVar()
     selected_option.set(option_list[0])
     selected_option_list.append(selected_option)
 
+#Makes frames() run 12 times, equal to the mappool size
 frame_count = 0
 
 for count in range(0, 13):
