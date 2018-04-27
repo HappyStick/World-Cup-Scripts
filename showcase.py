@@ -22,7 +22,7 @@ root.geometry("200x100")
 
 map_list = []
 
-for numbers in range(0,14):
+for numbers in range(0,17):
     map_list.append(numbers)
 
 #Grabs var to hold the selected map from map_list
