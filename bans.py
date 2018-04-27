@@ -8,7 +8,10 @@ script_path = "F:/World Cup/2018 - Taiko/Scripts/"
 #Takes in the team number and their selected ban, then moves appropriate files
 def bans(team_number, selected_ban):
 
-    copyfile(f"{maps_path}{selected_ban}_default.png", f"{current_path}banned_map_{team_number}.png")
+    if selected_ban == "None":
+        copyfile(f"{maps_path}transparant.png", f"{current_path}banned_map_{team_number}.png")
+    else:    
+        copyfile(f"{maps_path}{selected_ban}_default.png", f"{current_path}banned_map_{team_number}.png")
 
 #Runs bans()
 def multi_btn():
@@ -20,7 +23,7 @@ root = tk.Tk()
 root.title("Bans")
 root.geometry("200x100")
 
-map_list = []
+map_list = ["None"]
 
 for numbers in range(0,13):
     map_list.append(numbers)
