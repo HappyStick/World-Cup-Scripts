@@ -1,14 +1,15 @@
 import tkinter as tk
 import asyncio
+import json
 
 from shutil import copyfile
 from obswsrc import OBSWS
 from obswsrc.requests import ResponseStatus, SetSourceRenderRequest
 
-current_path = "F:/World Cup/2018 - Taiko/Scripts/OBS Output/Current Files/"
-schedule_output_path = "F:/World Cup/2018 - Taiko/Scripts/OBS Output/Schedule Files/"
-maps_path = "F:/World Cup/2018 - Taiko/Scripts/Resources/Maps/"
-script_path = "F:/World Cup/2018 - Taiko/Scripts/"
+current_path = "F:/World Cup/2018 - Catch/Scripts/OBS Output/Current Files/"
+schedule_output_path = "F:/World Cup/2018 - Catch/Scripts/OBS Output/Schedule Files/"
+maps_path = "F:/World Cup/2018 - Catch/Scripts/Resources/Maps/"
+script_path = "F:/World Cup/2018 - Catch/Scripts/"
 
 root = tk.Tk()
 root.title("Mappool")
@@ -100,7 +101,6 @@ def run_button():
     rolls("1", selected_roll_1.get())
     rolls("2", selected_roll_2.get())
 
-    # Unhide Tourney Client from Mappool Selection screen when any mappool-related action is taken
     def tourney_client_unhide():
 
         async def tourney_client_unhide_2():
@@ -120,15 +120,15 @@ def run_button():
 
 map_list = []
 option_list = ["Unpicked", "Red", "Blue", "Red Ban", "Blue Ban"]
-mod_list = ["NM", "NM", "NM", "NM", "NM", "NM", "HD", "HD", "HR", "HR", "DT", "DT", "FM", "FM", "FM"]
+mod_list = []
 selected_option_list = []
 
 #Grabs vars from user input
 selected_roll_1 = tk.StringVar()
-selected_roll_1.set("-")
+selected_roll_1.set("")
 
 selected_roll_2 = tk.StringVar()
-selected_roll_2.set("-")
+selected_roll_2.set("")
 
 roll_box_1 = tk.Entry(root, font = "exo2.0", justify = tk.CENTER, bg = "#F08080", textvariable = selected_roll_1, width = "6")
 roll_box_1.pack(side = tk.LEFT)
@@ -136,10 +136,18 @@ roll_box_1.pack(side = tk.LEFT)
 roll_box_2 = tk.Entry(root, font = "exo2.0", justify = tk.CENTER, bg = "#87CEFA", textvariable = selected_roll_2, width = "6")
 roll_box_2.pack(side = tk.RIGHT)
 
-map_amount = int(input("Mappool size?:\n"))
+with open(f"{script_path}mappool.json") as file:
+    mappool_data = json.load(file)
 
-for numbers in range(0, map_amount):
-    map_list.append(numbers)
+for maps_amount in mappool_data["mappool"]:
+    map_list.append(maps_amount["map_number"])
+
+for maps_amount in mappool_data["mappool"]:
+    mod_list.append(maps_amount["mod"])
+
+map_amount = 0
+while map_amount != len(map_list):
+    map_amount += 1
 
 #Stores the selected option for each in a list
 for numbers in range(0, map_amount):
@@ -151,7 +159,7 @@ for numbers in range(0, map_amount):
 #Runs frames() equal to the mappool size
 frame_count = 0
 
-for count in range(0, map_amount):
+for count in range(0, map_amount - 1):
 
     frames(count)
     frame_count = frame_count + 1
