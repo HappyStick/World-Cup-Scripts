@@ -1,28 +1,31 @@
 import tkinter as tk
+import shutil
 import math
 import json
 
-from shutil import copyfile
-
-script_path = "F:/World Cup/2018 - Taiko/Scripts/"
-flags_path = "F:/World Cup/2018 - Taiko/Scripts/Resources/Flags/"
-players_path = "F:/World Cup/2018 - Taiko/Scripts/Resources/Country Players/"
-rounds_path = "F:/World Cup/2018 - Taiko/Scripts/Resources/Round Name Files/"
-matches_path = "F:/World Cup/2018 - Taiko/Scripts/Matches/"
-current_path = "F:/World Cup/2018 - Taiko/Scripts/OBS Output/Current Files/"
+script_path = "F:/World Cup/2018 - Catch/Scripts/"
+flags_path = "F:/World Cup/2018 - Catch/Scripts/Resources/Flags/"
+players_path = "F:/World Cup/2018 - Catch/Scripts/Resources/Country Players/"
+rounds_path = "F:/World Cup/2018 - Catch/Scripts/Resources/Round Name Files/"
+matches_path = "F:/World Cup/2018 - Catch/Scripts/Matches/"
+current_path = "F:/World Cup/2018 - Catch/Scripts/OBS Output/Current Files/"
 
 def country_name(color, country, country_short):
 
     # Creates the country.txt files, writes user input into the .txt and closes it
-    with open(f"{current_path}country_file_{color}.txt", "w") as country_file:
-        country_file.write(country)
-    with open(f"{current_path}country_file_{color}_short.txt", "w") as country_file_short:
-        country_file_short.write(country_short)
+    country_file = open((f"{current_path}country_file_{color}.txt"), "w")
+    country_file_short = open((f"{current_path}country_file_{color}_short.txt"), "w")
+    country_file.write(country)
+    country_file_short.write(country_short)
+    country_file.close()
+    country_file_short.close()
 
 def flag_location(color, country):
 
     # Sets source and destination vars for red and blue flag input and copies it over
-    copyfile(f"{flags_path}{country}.png", f"{current_path}{color}_flag.png")
+    flag_source = (f"{flags_path}{country}.png")
+    flag_destination = (f"{current_path}{color}_flag.png")
+    shutil.copyfile(flag_source, flag_destination)
 
 def player_lists(color, country):
 
@@ -36,26 +39,39 @@ def player_lists(color, country):
         if number < len(player_data):
             player = player_data[number]
 
-            with open(f"{current_path}{color}_player{str(number + 1)}.txt", "w+") as player_name:
-                player_name.write(player)
+            player_name = open((f"{current_path}{color}_player{str(number + 1)}.txt"), "w+")
+
+            player_name.write(player)
+            
+            player_name.close()
         else:
-            with open(f"{current_path}{color}_player{str(number + 1)}.txt", "w+") as empty_name:
-                empty_name.write("")
+            empty_player = open((f"{current_path}{color}_player{str(number + 1)}.txt"), "w+")
+
+            empty_player.write("")
+
+            empty_player.close()
 
     player_list.close()
 
 # Writes the match time in matchTime.txt
 def match_times(month, day, time):
 
-    with open(f"{current_path}match_time.txt", "w") as match_file:
-        match_file.write(f"{day} {month} {time} UTC")
-    with open(f"{current_path}match_time_short.txt", "w") as match_time:
-        match_time.write(f"{time} UTC")
+    match_file = open((f"{current_path}match_time.txt"), "w")
+    match_time = open((f"{current_path}match_time_short.txt"), "w")
+    match_file.write((f"{day} {month} {time} UTC"))
+    match_time.write((f"{time} UTC"))
+    match_file.close()
+    match_time.close()
 
 def round_names(round_name):
 
-    copyfile(f"{rounds_path}{round_name}.png", f"{current_path}current_round.png")
-    copyfile(f"{rounds_path}intro {round_name}.png", f"{current_path}current_round_intro.png")
+    round_source = (f"{rounds_path}{round_name}.png")
+    round_destination = (f"{current_path}current_round.png")
+    shutil.copyfile(round_source, round_destination)
+
+    intro_round_source = (f"{rounds_path}intro {round_name}.png")
+    intro_round_destination = (f"{current_path}current_round_intro.png")
+    shutil.copyfile(intro_round_source, intro_round_destination)
 
 # Allows multiple functions in the button
 def multi_btn():
@@ -85,25 +101,19 @@ month_list = []
 day_list = range(1, 32)
 round_list = []
 
-with open(f"{script_path}countries.json") as file:
-    country_data = json.load(file)
+with open(f"{script_path}cupinfo.json") as file:
+    cupinfo_data = json.load(file)
 
-with open(f"{script_path}months.json") as file:
-    month_data = json.load(file)
-
-with open(f"{script_path}rounds.json") as file:
-    round_data = json.load(file)
-
-for countries in country_data["countries"]:
+for countries in cupinfo_data["countries"]:
     country_list.append(countries["full_name"])
 
-for countries in country_data["countries"]:
+for countries in cupinfo_data["countries"]:
     country_list_short.append(countries["abbreviation"])
 
-for months in month_data["months"]:
+for months in cupinfo_data["months"]:
     month_list.append(months)
 
-for rounds in round_data["rounds"]:
+for rounds in cupinfo_data["rounds"]:
     round_list.append(rounds)
 
 # Creates the var and initial selected variable in the list we're creating
