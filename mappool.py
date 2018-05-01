@@ -1,9 +1,14 @@
 import tkinter as tk
+import asyncio
 
 from shutil import copyfile
+from obswsrc import OBSWS
+from obswsrc.requests import ResponseStatus, SetSourceRenderRequest
 
 current_path = "F:/World Cup/2018 - Taiko/Scripts/OBS Output/Current Files/"
+schedule_output_path = "F:/World Cup/2018 - Taiko/Scripts/OBS Output/Schedule Files/"
 maps_path = "F:/World Cup/2018 - Taiko/Scripts/Resources/Maps/"
+script_path = "F:/World Cup/2018 - Taiko/Scripts/"
 
 root = tk.Tk()
 root.title("Mappool")
@@ -49,31 +54,43 @@ def frames(count):
 # These statements give the mods their specific colour, ensuring ease of use
     if mod_list[count] == "NM":
 
-        map_label = tk.Label(frame, bg = "#FFFFFF", text = f"{mod_list[count]} - {count + 1}")
+        map_label = tk.Label(frame, bg = "#FFFFFF", font = "exo2.0", text = f"{mod_list[count]} - {count + 1}")
         map_label.pack(side = tk.LEFT)
+        pick_menu = tk.OptionMenu(frame, selected_option_list[count], *option_list)
+        pick_menu.config(bg = "#FFFFFF", font = "exo2.0")
+        pick_menu.pack(side = tk.LEFT)
 
     if mod_list[count] == "HD":
 
-        map_label = tk.Label(frame, bg = "#FFFF66", text = f"{mod_list[count]} - {count + 1}")
+        map_label = tk.Label(frame, bg = "#FFFF66", font = "exo2.0", text = f"{mod_list[count]} - {count + 1}")
         map_label.pack(side = tk.LEFT)
+        pick_menu = tk.OptionMenu(frame, selected_option_list[count], *option_list)
+        pick_menu.config(bg = "#FFFF66", font = "exo2.0")
+        pick_menu.pack(side = tk.LEFT)
     
     if mod_list[count] == "HR":
 
-        map_label = tk.Label(frame, bg = "#F08080", text = f"{mod_list[count]} - {count + 1}")
+        map_label = tk.Label(frame, bg = "#F08080", font = "exo2.0", text = f"{mod_list[count]} - {count + 1}")
         map_label.pack(side = tk.LEFT)
+        pick_menu = tk.OptionMenu(frame, selected_option_list[count], *option_list)
+        pick_menu.config(bg = "#F08080", font = "exo2.0")
+        pick_menu.pack(side = tk.LEFT)
     
     if mod_list[count] == "DT": 
 
-        map_label = tk.Label(frame, bg = "#6495ED", text = f"{mod_list[count]} - {count + 1}")
+        map_label = tk.Label(frame, bg = "#6495ED", font = "exo2.0", text = f"{mod_list[count]} - {count + 1}")
         map_label.pack(side = tk.LEFT)
+        pick_menu = tk.OptionMenu(frame, selected_option_list[count], *option_list)
+        pick_menu.config(bg = "#6495ED", font = "exo2.0")
+        pick_menu.pack(side = tk.LEFT)
 
     if mod_list[count] == "FM": 
 
-        map_label = tk.Label(frame, bg = "#BA55D3", text = f"{mod_list[count]} - {count + 1}")
+        map_label = tk.Label(frame, bg = "#BA55D3", font = "exo2.0", text = f"{mod_list[count]} - {count + 1}")
         map_label.pack(side = tk.LEFT)
-
-    pick_menu = tk.OptionMenu(frame, selected_option_list[count], *option_list)
-    pick_menu.pack(side = tk.LEFT)
+        pick_menu = tk.OptionMenu(frame, selected_option_list[count], *option_list)
+        pick_menu.config(bg = "#BA55D3", font = "exo2.0")
+        pick_menu.pack(side = tk.LEFT)
 
 def run_button():
 
@@ -83,6 +100,24 @@ def run_button():
     rolls("1", selected_roll_1.get())
     rolls("2", selected_roll_2.get())
 
+    # Unhide Tourney Client from Mappool Selection screen when any mappool-related action is taken
+    def tourney_client_unhide():
+
+        async def tourney_client_unhide_2():
+
+            await asyncio.sleep(0.01)
+            async with OBSWS("localhost", 4444, "PIqDeb0q7QYCNunQUMyC") as obsws:
+                await asyncio.wait( [
+                    obsws.require(SetSourceRenderRequest(source=f"Tourney Client", render=True, scene_name="Mappool")),
+                ] )
+        
+        tourney_client_unhide_2()
+        
+        loop = asyncio.get_event_loop()
+        loop.run_until_complete(tourney_client_unhide_2())    
+    
+    tourney_client_unhide()
+
 map_list = []
 option_list = ["Unpicked", "Red", "Blue", "Red Ban", "Blue Ban"]
 mod_list = ["NM", "NM", "NM", "NM", "NM", "NM", "HD", "HD", "HR", "HR", "DT", "DT", "FM", "FM", "FM"]
@@ -90,10 +125,10 @@ selected_option_list = []
 
 #Grabs vars from user input
 selected_roll_1 = tk.StringVar()
-selected_roll_1.set("")
+selected_roll_1.set("-")
 
 selected_roll_2 = tk.StringVar()
-selected_roll_2.set("")
+selected_roll_2.set("-")
 
 roll_box_1 = tk.Entry(root, font = "exo2.0", justify = tk.CENTER, bg = "#F08080", textvariable = selected_roll_1, width = "6")
 roll_box_1.pack(side = tk.LEFT)
@@ -113,7 +148,7 @@ for numbers in range(0, map_amount):
     selected_option.set(option_list[0])
     selected_option_list.append(selected_option)
 
-#Makes frames() run 12 times, equal to the mappool size
+#Runs frames() equal to the mappool size
 frame_count = 0
 
 for count in range(0, map_amount):
