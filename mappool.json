@@ -1,0 +1,148 @@
+{
+    "mappool" : [
+        {
+            "map_number" : "1",
+            "mod" : "NM",
+            "length" : "1:22", 
+            "bpm" : "180",
+            "ar" : "8",
+            "cs" : "6",
+            "hp" : "9"
+        }, 
+        {
+            "map_number" : "2",
+            "mod" : "NM",
+            "length" : "2:22", 
+            "bpm" : "222",
+            "ar" : "9",
+            "cs" : "7",
+            "hp" : "6"
+        }, 
+        {
+            "map_number" : "3",
+            "mod" : "NM",
+            "length" : "3:22", 
+            "bpm" : "222",
+            "ar" : "9",
+            "cs" : "7",
+            "hp" : "6"
+        }, 
+        {
+            "map_number" : "4",
+            "mod" : "NM",
+            "length" : "4:22", 
+            "bpm" : "222",
+            "ar" : "9",
+            "cs" : "7",
+            "hp" : "6"
+        }, 
+        {
+            "map_number" : "5",
+            "mod" : "NM",
+            "length" : "2:22", 
+            "bpm" : "222",
+            "ar" : "9",
+            "cs" : "7",
+            "hp" : "6"
+        }, 
+        {
+            "map_number" : "6",
+            "mod" : "NM",
+            "length" : "2:22", 
+            "bpm" : "222",
+            "ar" : "9",
+            "cs" : "7",
+            "hp" : "6"
+        }, 
+        {
+            "map_number" : "7",
+            "mod" : "HD",
+            "length" : "2:22", 
+            "bpm" : "222",
+            "ar" : "9",
+            "cs" : "7",
+            "hp" : "6"
+        }, 
+        {
+            "map_number" : "8",
+            "mod" : "HD",
+            "length" : "2:22", 
+            "bpm" : "222",
+            "ar" : "9",
+            "cs" : "7",
+            "hp" : "6"
+        }, 
+        {
+            "map_number" : "9",
+            "mod" : "HD",
+            "length" : "2:22", 
+            "bpm" : "222",
+            "ar" : "9",
+            "cs" : "7",
+            "hp" : "6"
+        }, 
+        {
+            "map_number" : "10",
+            "mod" : "HR",
+            "length" : "2:22", 
+            "bpm" : "222",
+            "ar" : "9",
+            "cs" : "7",
+            "hp" : "6"
+        }, 
+        {
+            "map_number" : "11",
+            "mod" : "HR",
+            "length" : "2:22", 
+            "bpm" : "222",
+            "ar" : "9",
+            "cs" : "7",
+            "hp" : "6"
+        }, 
+        {
+            "map_number" : "12",
+            "mod" : "HR",
+            "length" : "2:22", 
+            "bpm" : "222",
+            "ar" : "9",
+            "cs" : "7",
+            "hp" : "6"
+        }, 
+        {
+            "map_number" : "13",
+            "mod" : "DT",
+            "length" : "2:22", 
+            "bpm" : "222",
+            "ar" : "9",
+            "cs" : "7",
+            "hp" : "6"
+        }, 
+        {
+            "map_number" : "14",
+            "mod" : "DT",
+            "length" : "2:22", 
+            "bpm" : "222",
+            "ar" : "9",
+            "cs" : "7",
+            "hp" : "6"
+        }, 
+        {
+            "map_number" : "15",
+            "mod" : "DT",
+            "length" : "2:42", 
+            "bpm" : "232",
+            "ar" : "1",
+            "cs" : "2",
+            "hp" : "3"
+        }, 
+        {
+            "map_number" : "16",
+            "mod" : "FM",
+            "length" : "5:00", 
+            "bpm" : "200",
+            "ar" : "5",
+            "cs" : "6",
+            "hp" : "7"
+        } 
+    ]
+}
