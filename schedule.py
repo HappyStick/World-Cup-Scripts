@@ -261,12 +261,14 @@ def next_match_button():
     copyfile(f"{maps_path}transparant.png", f"{current_output_path}banned_map_1.png")
     copyfile(f"{maps_path}transparant.png", f"{current_output_path}banned_map_2.png")
     with open(f"{current_output_path}roll_1.txt", "w") as roll_1:
-        roll_1.write("")
+        roll_1.write("-")
     with open(f"{current_output_path}roll_2.txt", "w") as roll_2:
-        roll_2.write("")
+        roll_2.write("-")
 
     for count in range(0,15):
         copyfile(f"{maps_path}{count}_default.png", f"{current_output_path}{count}_map.png")
+
+    copyfile(f"{maps_path}/transparant.png", f"{current_output_path}showcase_map.png")
 
     def next_match_hide():
 
