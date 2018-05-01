@@ -1,7 +1,8 @@
 import tkinter as tk
-import shutil
 import math
 import json
+
+from shutil import copyfile
 
 script_path = "F:/World Cup/2018 - Taiko/Scripts/"
 flags_path = "F:/World Cup/2018 - Taiko/Scripts/Resources/Flags/"
@@ -13,19 +14,15 @@ current_path = "F:/World Cup/2018 - Taiko/Scripts/OBS Output/Current Files/"
 def country_name(color, country, country_short):
 
     # Creates the country.txt files, writes user input into the .txt and closes it
-    country_file = open((f"{current_path}country_file_{color}.txt"), "w")
-    country_file_short = open((f"{current_path}country_file_{color}_short.txt"), "w")
-    country_file.write(country)
-    country_file_short.write(country_short)
-    country_file.close()
-    country_file_short.close()
+    with open(f"{current_path}country_file_{color}.txt", "w") as country_file:
+        country_file.write(country)
+    with open(f"{current_path}country_file_{color}_short.txt", "w") as country_file_short:
+        country_file_short.write(country_short)
 
 def flag_location(color, country):
 
     # Sets source and destination vars for red and blue flag input and copies it over
-    flag_source = (f"{flags_path}{country}.png")
-    flag_destination = (f"{current_path}{color}_flag.png")
-    shutil.copyfile(flag_source, flag_destination)
+    copyfile(f"{flags_path}{country}.png", f"{current_path}{color}_flag.png")
 
 def player_lists(color, country):
 
@@ -39,39 +36,26 @@ def player_lists(color, country):
         if number < len(player_data):
             player = player_data[number]
 
-            player_name = open((f"{current_path}{color}_player{str(number + 1)}.txt"), "w+")
-
-            player_name.write(player)
-            
-            player_name.close()
+            with open(f"{current_path}{color}_player{str(number + 1)}.txt", "w+") as player_name:
+                player_name.write(player)
         else:
-            empty_player = open((f"{current_path}{color}_player{str(number + 1)}.txt"), "w+")
-
-            empty_player.write("")
-
-            empty_player.close()
+            with open(f"{current_path}{color}_player{str(number + 1)}.txt", "w+") as empty_name:
+                empty_name.write("")
 
     player_list.close()
 
 # Writes the match time in matchTime.txt
 def match_times(month, day, time):
 
-    match_file = open((f"{current_path}match_time.txt"), "w")
-    match_time = open((f"{current_path}match_time_short.txt"), "w")
-    match_file.write((f"{day} {month} {time} UTC"))
-    match_time.write((f"{time} UTC"))
-    match_file.close()
-    match_time.close()
+    with open(f"{current_path}match_time.txt", "w") as match_file:
+        match_file.write(f"{day} {month} {time} UTC")
+    with open(f"{current_path}match_time_short.txt", "w") as match_time:
+        match_time.write(f"{time} UTC")
 
 def round_names(round_name):
 
-    round_source = (f"{rounds_path}{round_name}.png")
-    round_destination = (f"{current_path}current_round.png")
-    shutil.copyfile(round_source, round_destination)
-
-    intro_round_source = (f"{rounds_path}intro {round_name}.png")
-    intro_round_destination = (f"{current_path}current_round_intro.png")
-    shutil.copyfile(intro_round_source, intro_round_destination)
+    copyfile(f"{rounds_path}{round_name}.png", f"{current_path}current_round.png")
+    copyfile(f"{rounds_path}intro {round_name}.png", f"{current_path}current_round_intro.png")
 
 # Allows multiple functions in the button
 def multi_btn():
