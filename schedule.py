@@ -6,12 +6,12 @@ from shutil import copyfile
 from obswsrc import OBSWS
 from obswsrc.requests import ResponseStatus, SetSourceRenderRequest
 
-flags_path = "F:/World Cup/2018 - Taiko/Scripts/Resources/Flags/"
-schedule_output_path = "F:/World Cup/2018 - Taiko/Scripts/OBS Output/Schedule Files/"
-current_output_path = "F:/World Cup/2018 - Taiko/Scripts/OBS Output/Current Files/"
-script_path = "F:/World Cup/2018 - Taiko/Scripts/"
-resources_path = "F:/World Cup/2018 - Taiko/Scripts/Resources/"
-maps_path = "F:/World Cup/2018 - Taiko/Scripts/Resources/Maps/"
+flags_path = "F:/World Cup/2018 - Current Cup/Scripts/Resources/Flags/"
+schedule_output_path = "F:/World Cup/2018 - Current Cup/Scripts/OBS Output/Schedule Files/"
+current_output_path = "F:/World Cup/2018 - Current Cup/Scripts/OBS Output/Current Files/"
+script_path = "F:/World Cup/2018 - Current Cup/Scripts/"
+resources_path = "F:/World Cup/2018 - Current Cup/Scripts/Resources/"
+maps_path = "F:/World Cup/2018 - Current Cup/Scripts/Resources/Maps/"
 
 # Each match class instance is assigned a match number, team names and time
 class match:

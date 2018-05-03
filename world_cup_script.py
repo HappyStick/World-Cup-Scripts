@@ -3,12 +3,12 @@ import shutil
 import math
 import json
 
-script_path = "F:/World Cup/2018 - Catch/Scripts/"
-flags_path = "F:/World Cup/2018 - Catch/Scripts/Resources/Flags/"
-players_path = "F:/World Cup/2018 - Catch/Scripts/Resources/Country Players/"
-rounds_path = "F:/World Cup/2018 - Catch/Scripts/Resources/Round Name Files/"
-matches_path = "F:/World Cup/2018 - Catch/Scripts/Matches/"
-current_path = "F:/World Cup/2018 - Catch/Scripts/OBS Output/Current Files/"
+script_path = "F:/World Cup/2018 - Current Cup/Scripts/"
+flags_path = "F:/World Cup/2018 - Current Cup/Scripts/Resources/Flags/"
+players_path = "F:/World Cup/2018 - Current Cup/Scripts/Resources/Country Players/"
+rounds_path = "F:/World Cup/2018 - Current Cup/Scripts/Resources/Round Name Files/"
+matches_path = "F:/World Cup/2018 - Current Cup/Scripts/Matches/"
+current_path = "F:/World Cup/2018 - Current Cup/Scripts/OBS Output/Current Files/"
 
 def country_name(color, country, country_short):
 

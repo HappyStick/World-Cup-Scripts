@@ -6,10 +6,10 @@ from shutil import copyfile
 from obswsrc import OBSWS
 from obswsrc.requests import ResponseStatus, SetSourceRenderRequest
 
-current_path = "F:/World Cup/2018 - Catch/Scripts/OBS Output/Current Files/"
-schedule_output_path = "F:/World Cup/2018 - Catch/Scripts/OBS Output/Schedule Files/"
-maps_path = "F:/World Cup/2018 - Catch/Scripts/Resources/Maps/"
-script_path = "F:/World Cup/2018 - Catch/Scripts/"
+current_path = "F:/World Cup/2018 - Current Cup/Scripts/OBS Output/Current Files/"
+schedule_output_path = "F:/World Current Cup/2018 - Catch/Scripts/OBS Output/Schedule Files/"
+maps_path = "F:/World Cup/2018 - Current Cup/Scripts/Resources/Maps/"
+script_path = "F:/World Cup/2018 - Current Cup/Scripts/"
 
 root = tk.Tk()
 root.title("Mappool")
