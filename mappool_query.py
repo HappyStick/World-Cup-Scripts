@@ -3,8 +3,6 @@ import json
 import time
 import tkinter as tk
 from bs4 import BeautifulSoup
-from datetime import datetime, timedelta
-import decimal
 
 def frames(count):
 
@@ -14,7 +12,7 @@ def frames(count):
     map_label = tk.Label(frame, text = f"Map {count + 1}")
     map_label.pack(side = tk.LEFT)
 
-    map_id_entry = tk.Entry(frame, textvariable = map_id_list[count], width = "20")
+    map_id_entry = tk.Entry(frame, textvariable = map_id_list[count], width = "15")
     map_id_entry.pack(side = tk.LEFT)
 
     mod_entry = tk.OptionMenu(frame, mod_pick_list[count], *mods)
@@ -43,6 +41,8 @@ def get_values(count, map_id, mod, mappoolfile):
         map_data = json.load(json_file)
 
     bpm_value = round(map_data["bpm"], 1)
+    mapset_jpg = map_data["covers"]["cover@2x"]
+    diff_id = map_data["id"]
 
     i = 0
 
@@ -71,6 +71,8 @@ def get_values(count, map_id, mod, mappoolfile):
     drain_value = drain_value + 0.0
     
     mappool = {"map_number" : str(count + 1),
+                "diff_id" : str(diff_id),
+                "mapset_jpg" : str(mapset_jpg),
                 "mod" : str(mod),
                 "length" : str(time_value),
                 "bpm" : str(bpm_value),
@@ -90,11 +92,18 @@ def run_button():
 
         frame_count = frame_count + 1
 
-def export_button():
+def export_showcase_button():
 
     mappool_final = {"mappool" : mappool_list}
 
     with open("F:/World Cup/2018 - Current cup/Scripts/showcase.json", "w") as json_file:
+        json.dump(mappool_final, json_file, indent = 4)
+
+def export_mappool_button():
+
+    mappool_final = {"mappool" : mappool_list}
+
+    with open("F:/World Cup/2018 - Current cup/Scripts/mappool.json", "w") as json_file:
         json.dump(mappool_final, json_file, indent = 4)
 
 map_amount = int(input("Mappool Size?:\n"))
@@ -129,7 +138,10 @@ for count in range(0, map_amount):
 run_btn = tk.Button(root, text = "Run", command = run_button)
 run_btn.pack(side = tk.BOTTOM)
 
-export_btn = tk.Button(root, text = "Export", command = export_button)
-export_btn.pack(side = tk.BOTTOM)
+export_showcase_btn = tk.Button(root, text = "Export Showcase", command = export_showcase_button)
+export_showcase_btn.pack(side = tk.BOTTOM)
+
+export_mappool_btn = tk.Button(root, text = "Export Mappool", command = export_mappool_button)
+export_mappool_btn.pack(side = tk.BOTTOM)
 
 root.mainloop()
