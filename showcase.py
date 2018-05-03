@@ -2,6 +2,7 @@ import tkinter as tk
 import json
 import asyncio
 import datetime
+import urllib.request
 
 from shutil import copyfile
 from obswsrc import OBSWS
@@ -10,6 +11,7 @@ from obswsrc.requests import ResponseStatus, SetSourceRenderRequest
 current_path = "F:/World Cup/2018 - Current Cup/Scripts/OBS Output/Current Files/"
 maps_path = "F:/World Cup/2018 - Current Cup/Scripts/Resources/Maps/"
 showcase_maps_path = "F:/World Cup/2018 - Current Cup/Scripts/Resources/Maps/Showcase/"
+showcase_images_path = "F:/World Cup/2018 - Current Cup/Scripts/Resources/Maps/Showcase Images/"
 script_path = "F:/World Cup/2018 - Current Cup/Scripts/"
 
 def maps(selected_map):
@@ -216,6 +218,11 @@ def multi_btn():
 
     values(selected_map.get())
 
+def image_btn():
+
+    for count in range(0, map_amount):
+        urllib.request.urlretrieve(map_jpg_list[count - 1], f"{showcase_images_path}{map_diff_id_list[count - 1]}.jpg")
+
 #map_amount = int(input("Mappool size?:\n"))
 
 root = tk.Tk()
@@ -223,6 +230,8 @@ root.title("Showcase")
 root.geometry("200x100")
 
 map_list = ["None"]
+map_diff_id_list = []
+map_jpg_list = []
 map_length_list = []
 map_mod_list = []
 map_bpm_list = []
@@ -235,6 +244,8 @@ with open(f"{script_path}showcase.json") as file:
 
 for maps_amount in showcase_data["mappool"]:
     map_list.append(maps_amount["map_number"])
+    map_diff_id_list.append(maps_amount["diff_id"])
+    map_jpg_list.append(maps_amount["mapset_jpg"])
     map_mod_list.append(maps_amount["mod"])
     map_length_list.append(maps_amount["length"])
     map_bpm_list.append(maps_amount["bpm"])
@@ -256,5 +267,8 @@ map_menu.pack(side = tk.TOP)
 
 run_btn = tk.Button(root, text = "Run", command = multi_btn)
 run_btn.pack(side = tk.BOTTOM)
+
+img_btn = tk.Button(root, text = "Images", command = image_btn)
+img_btn.pack(side = tk.BOTTOM)
 
 root.mainloop()
