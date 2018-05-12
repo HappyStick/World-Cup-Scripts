@@ -1,5 +1,6 @@
 #include json2.js
 
+// All global variables
 var javascriptPath = "F:/World Cup/2018 - Current cup/Scripts/mappool_cards";
 var mappoolCardPath = "F:/World Cup/2018 - Current cup/Scripts/Resources/Maps/Showcase"
 
@@ -19,6 +20,7 @@ var songNameLayer50 = textLayers.artLayers.getByName("song_name_50");
 var artistDiffNameLayer = textLayers.artLayers.getByName("artist_diff_name");
 var mapperNameLayer = textLayers.artLayers.getByName("mapper_name");
 
+// Loads the json into showcase and runs the script showcase.length times
 (function main(){
 
     var showcase = loadJson('showcase.json');
@@ -31,6 +33,7 @@ var mapperNameLayer = textLayers.artLayers.getByName("mapper_name");
     }
 })();
 
+// Loads the json into memory
 function loadJson(relPath){
 
     var script = new File($.fileName);
@@ -43,6 +46,7 @@ function loadJson(relPath){
     return JSON.parse(str);
 }
 
+// Does the text changes & additions for each mappool card
 function textManipulation(show){
 	songNameLayer.visible = false;
 	songNameLayer50.visible = false;
@@ -60,6 +64,7 @@ function textManipulation(show){
 	importIMG(show);
 }
 
+// Turns all the mappool images into their _default.png 
 function importIMG(show){
 	app.load(file[parseInt(show.map_number - 1)]);
 	newImage = app.activeDocument;
@@ -99,6 +104,7 @@ function importIMG(show){
 	};
 
 	savePNG_default(parseInt(show.map_number - 1) + '_default', show);
+
 }
 
 function savePNG_default(name, show){
@@ -113,6 +119,7 @@ function savePNG_default(name, show){
     blackWhite(show);
 }
 
+// Changes the _default variant into the _bw variant
 function blackWhite(show){
 	var doc = app.activeDocument.layerSets.getByName("master");
 	var imgLayerSetRef = doc.layerSets.getByName("image");
@@ -143,6 +150,7 @@ function savePNG_bw(name, show){
     teamRed(show);
 }
 
+// Changes the _bw variant into the _red variant
 function teamRed(show){
 	var doc = app.activeDocument.layerSets.getByName("master");
 	var imgLayerSetRef = doc.layerSets.getByName("image");
@@ -173,6 +181,7 @@ function savePNG_red(name, show){
     teamBlue(show);
 }
 
+// Changes the _red variant into the _blue variant
 function teamBlue(show){
 	var doc = app.activeDocument.layerSets.getByName("master");
 	var imgLayerSetRef = doc.layerSets.getByName("image");
@@ -205,6 +214,7 @@ function savePNG_blue(name, show){
     resetDoc();
 }
 
+// Resets everything for the next image to be loaded in
 function resetDoc(){
 	var doc = app.activeDocument.layerSets.getByName("master");
 	var bgLayer = doc.layerSets.getByName("image").layers[0];
