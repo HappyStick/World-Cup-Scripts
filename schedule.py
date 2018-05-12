@@ -1,4 +1,5 @@
 import tkinter as tk
+import math
 import json
 import asyncio
 
@@ -12,11 +13,13 @@ current_output_path = "F:/World Cup/2018 - Current Cup/Scripts/OBS Output/Curren
 script_path = "F:/World Cup/2018 - Current Cup/Scripts/"
 resources_path = "F:/World Cup/2018 - Current Cup/Scripts/Resources/"
 maps_path = "F:/World Cup/2018 - Current Cup/Scripts/Resources/Maps/"
+rounds_path = "F:/World Cup/2018 - Current Cup/Scripts/Resources/Round Name Files/"
+players_path = "F:/World Cup/2018 - Current Cup/Scripts/Resources/Country Players/"
 
 # Each match class instance is assigned a match number, team names and time
 class match:
 
-    def __init__(self, number, team_1, team_2, match_time, done, conditional, match_score_1, match_score_2):
+    def __init__(self, number, team_1, team_2, match_time, done, conditional, current, match_score_1, match_score_2, round_name):
 
         self.number = number
         self.team_1 = team_1
@@ -24,11 +27,13 @@ class match:
         self.match_time = match_time
         self.done = done
         self.conditional = conditional
+        self.current = current
         self.match_score_1 = match_score_1
         self.match_score_2 = match_score_2
+        self.round_name = round_name
 
 # Copies over the flags and outputs time into .txt
-def schedule(matches):
+def schedule(matches, month, day, satsun):
 
     copyfile(f"{flags_path}{matches.team_1}.png", f"{schedule_output_path}{matches.number}_flag_1.png")
     copyfile(f"{flags_path}{matches.team_2}.png", f"{schedule_output_path}{matches.number}_flag_2.png")
@@ -166,7 +171,6 @@ def schedule(matches):
         loop = asyncio.get_event_loop()
         loop.run_until_complete(hide_conditional_2())
 
-
     # Checks if checkbox is ticked and runs appropriate function
     if matches.done == 1:
         hide()
@@ -177,6 +181,89 @@ def schedule(matches):
         unhide_conditional()
     elif matches.conditional == 0:
         hide_conditional()
+
+    if matches.current == 1:
+        current(matches, month, str(day), satsun)
+
+# Updates all settings for currently selected match
+def current(matches, month, day, satsun):
+
+    with open(f"{script_path}country_players.json") as file:
+        country_data_current = json.load(file)
+
+    country_players_list = list(country_data_current.keys())
+    full_country_name_1 = ""
+    full_country_name_2 = ""
+
+    i = 0
+    for countries in country_data_current.values():
+        if countries["Abbreviation"] == matches.team_1:
+            full_country_name_1 = country_players_list[i]
+        if countries["Abbreviation"] == matches.team_2:
+            full_country_name_2 = country_players_list[i]
+        i += 1
+
+    def flag_location(color, country_name):
+
+        copyfile(f"{flags_path}{country_name}.png", f"{current_output_path}{color}_flag.png")
+    
+    def country_names(color, country_name, country_name_short):
+
+        with open(f"{current_output_path}country_file_{color}.txt", "w") as country_file:
+            country_file.write(country_name)
+        with open(f"{current_output_path}country_file_{color}_short.txt", "w") as country_file_short:
+            country_file_short.write(country_name_short)
+
+    def match_times(month, day, time):
+
+        with open(f"{current_output_path}match_time.txt", "w") as match_file:
+            match_file.write(f"{day} {month} {time} UTC")
+        with open(f"{current_output_path}match_time_short.txt", "w") as match_time:
+            match_time.write(f"{time} UTC")
+
+    def player_lists(color, country_name):
+
+        # Adds user_input .txt into memory then reads the lines in the .txt and inputs it into var
+        player_list = open((f"{players_path}{country_name}.txt"), "r")
+        player_data = player_list.readlines()
+
+        # For entries 0 - 3 creates player(number).txt reading one line from player_data at a time
+        for number in range(5):
+            # Ensures that if a country has less than 4 players it creates an empty .txt for each slot
+            if number < len(player_data):
+                player = player_data[number]
+
+                with open(f"{current_output_path}{color}_player{str(number + 1)}.txt", "w+") as player_name:
+                    player_name.write(player)
+
+            else:
+                with open(f"{current_output_path}{color}_player{str(number + 1)}.txt", "w+") as empty_name:
+                    empty_name.write("")
+
+        player_list.close()
+
+    def round_names(round, satsun):
+
+        copyfile(f"{rounds_path}{matches.round_name}.png", f"{current_output_path}current_round.png")
+        copyfile(f"{rounds_path}intro {matches.round_name}.png", f"{current_output_path}current_round_intro.png")
+
+        if satsun == "Sat":
+            copyfile(f"{rounds_path}{satsun} sched {matches.round_name}.png", f"{current_output_path}current_round_schedule.png")
+        if satsun == "Sun":
+            copyfile(f"{rounds_path}{satsun} sched {matches.round_name}.png", f"{current_output_path}current_round_schedule.png")
+
+    flag_location("red", matches.team_1)
+    flag_location("blue", matches.team_2)
+
+    country_names("red", full_country_name_1, matches.team_1)
+    country_names("blue", full_country_name_2, matches.team_2)
+
+    match_times(selected_month.get(), str(selected_day.get()), matches.match_time)
+
+    player_lists("red", full_country_name_1)
+    player_lists("blue", full_country_name_2)
+
+    round_names(matches.round_name, satsun)
 
 # Creates var count instances of frames with Match #, Team 1 / 2 and time
 def frames(count):
@@ -196,17 +283,23 @@ def frames(count):
     time_box = tk.Entry(frame, textvariable = time_input_list[count], width = "5")
     time_box.pack(side = tk.LEFT)
 
+    round_input = tk.OptionMenu(frame, selected_round_list[count], *round_list)
+    round_input.pack(side = tk.LEFT)
+
     score_box_1 = tk.Entry(frame, textvariable = score_input_list_1[count], width = "2")
     score_box_1.pack(side = tk.LEFT)
 
     score_box_2 = tk.Entry(frame, textvariable = score_input_list_2[count], width = "2")
     score_box_2.pack(side = tk.LEFT)
 
-    check_box_conditional_box = tk.Checkbutton(frame, text = "Cond.", variable = check_box_conditional_list[count])
-    check_box_conditional_box.pack(side = tk.RIGHT)
+    check_box_current_box = tk.Checkbutton(frame, text = "Current", variable = check_box_current_list[count])
+    check_box_current_box.pack(side = tk.LEFT)
 
-    check_box_box = tk.Checkbutton(frame, text = "Match Over", variable = check_box_list[count])
-    check_box_box.pack(side = tk.RIGHT)
+    check_box_box = tk.Checkbutton(frame, text = "Finished", variable = check_box_list[count])
+    check_box_box.pack(side = tk.LEFT)
+
+    check_box_conditional_box = tk.Checkbutton(frame, text = "Cond.", variable = check_box_conditional_list[count])
+    check_box_conditional_box.pack(side = tk.LEFT)
 
 # Resets the entire schedule screen to blank. Previously the elements previously used when moving to a smaller schedule would have to be hidden manually.
 def reset_button():
@@ -296,47 +389,62 @@ def run_button():
 
         frame_count = frame_count + 1
 
-        matches = match(f"{frame_count}", selected_country_list[count * 2].get(), selected_country_list[count * 2 + 1].get(), time_input_list[count].get(), check_box_list[count].get(), check_box_conditional_list[count].get(), score_input_list_1[count].get(), score_input_list_2[count].get())
+        matches = match(f"{frame_count}", selected_country_list[count * 2].get(), selected_country_list[count * 2 + 1].get(), time_input_list[count].get(), check_box_list[count].get(), check_box_conditional_list[count].get(), check_box_current_list[count].get(), score_input_list_1[count].get(), score_input_list_2[count].get(), selected_round_list[count].get())
 
-        schedule(matches)
+        schedule(matches, selected_month.get(), selected_day.get(), selected_satsun.get())
 
 root = tk.Tk()
 
 root.title("OBS Schedule Tool")
-root.geometry("500x500")
+root.geometry("600x500")
 
 # Creates country_list based on schedule.json
-with open(f"{script_path}countries.json") as file:
+with open(f"{script_path}country_players.json") as file:
     country_data = json.load(file)
 
 country_list = []
-for countries in country_data["countries"]:
-    country_list.append(countries["abbreviation"])
 
+for countries in country_data.values():
+    country_list.append(countries["Abbreviation"])
+
+with open(f"{script_path}cupinfo.json") as file:
+    cupinfo_data = json.load(file)
+
+month_list = []
+round_list = []
+
+for months in cupinfo_data["months"]:
+    month_list.append(months)
+
+for rounds in cupinfo_data["rounds"]:
+    round_list.append(rounds)
+
+day_list = range(1, 32)
+satsun_list = ["Sat", "Sun"]
 time_list = ["00:00"]
 check_box_input = [False]
 check_box_conditional_input = [False]
-score_list_1 = ["0"]
-score_list_2 = ["0"]
+check_box_current_input = [False]
+score_list_1 = [""]
+score_list_2 = [""]
 
-# Creates empty country, time and checkbox lists
 selected_country_list = []
+selected_round_list = []
 time_input_list = []
 check_box_list = []
 check_box_conditional_list = []
+check_box_current_list = []
 score_input_list_1 = []
 score_input_list_2 = []
 
 match_amount = int(input("Match count?:\n"))
 
-# Creates iterations of time_input to be used by frames() at initial runtime
 for numbers in range(0, match_amount):
 
     time_input = tk.StringVar()
     time_input.set(time_list[0])
     time_input_list.append(time_input)
 
-# Creates iterations of score_input to be used by frames() at initial runtime
 for numbers in range(0, match_amount):
 
     score_input_1 = tk.StringVar()
@@ -349,7 +457,6 @@ for numbers in range(0, match_amount):
     score_input_2.set(score_list_2[0])
     score_input_list_2.append(score_input_2)
 
-# Creates iterations of checkbox to be used by frames() at initial runtime
 for numbers in range(0, match_amount):
 
     check_box = tk.IntVar()
@@ -362,12 +469,23 @@ for numbers in range(0, match_amount):
     check_box_conditional.set(check_box_conditional_input[0])
     check_box_conditional_list.append(check_box_conditional)
 
-# Creates iterations of selected_country to be used by frames() at initial runtime
+for numbers in range(0, match_amount):
+
+    check_box_current = tk.IntVar()
+    check_box_current.set(check_box_current_input[0])
+    check_box_current_list.append(check_box_current)
+
 for numbers in range(0, match_amount * 2):
 
     selected_country = tk.StringVar()
     selected_country.set(country_list[0])
     selected_country_list.append(selected_country)
+
+for numbers in range(0, match_amount):
+
+    selected_round = tk.StringVar()
+    selected_round.set(round_list[0])
+    selected_round_list.append(selected_round)
 
 # Creates frame count for frames()
 frame_count = 0
@@ -376,6 +494,27 @@ for count in range(0, match_amount):
 
     frame_count = frame_count + 1
     frames(count)
+
+frame2 = tk.Frame(root)
+frame2.pack()
+
+selected_day = tk.StringVar()
+selected_day.set(day_list[0])
+
+selected_month = tk.StringVar()
+selected_month.set(month_list[0])
+
+selected_satsun = tk.StringVar()
+selected_satsun.set(satsun_list[0])
+
+satsun_menu = tk.OptionMenu(frame2, selected_satsun, *satsun_list)
+satsun_menu.pack(side = tk.LEFT)
+
+day_menu = tk.OptionMenu(frame2, selected_day, *day_list)
+day_menu.pack(side = tk.LEFT)
+
+month_menu = tk.OptionMenu(frame2, selected_month, *month_list)
+month_menu.pack(side = tk.LEFT)
 
 run_btn = tk.Button(root, text = "Run", command = run_button)
 run_btn.pack(side = tk.BOTTOM)
