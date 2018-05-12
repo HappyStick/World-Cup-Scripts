@@ -139,10 +139,10 @@ roll_box_2.pack(side = tk.RIGHT)
 with open(f"{script_path}mappool.json") as file:
     mappool_data = json.load(file)
 
-for maps_amount in mappool_data["mappool"]:
+for maps_amount in mappool_data:
     map_list.append(maps_amount["map_number"])
 
-for maps_amount in mappool_data["mappool"]:
+for maps_amount in mappool_data:
     mod_list.append(maps_amount["mod"])
 
 map_amount = 0

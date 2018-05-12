@@ -3,17 +3,22 @@ import json
 import asyncio
 import datetime
 import urllib.request
+import os
 
 from shutil import copyfile
 from obswsrc import OBSWS
 from obswsrc.requests import ResponseStatus, SetSourceRenderRequest
+from PIL import Image
 
 current_path = "F:/World Cup/2018 - Current Cup/Scripts/OBS Output/Current Files/"
 maps_path = "F:/World Cup/2018 - Current Cup/Scripts/Resources/Maps/"
+mappool_cards = "F:/World Cup/2018 - Current Cup/Scripts/mappool_cards/"
 showcase_maps_path = "F:/World Cup/2018 - Current Cup/Scripts/Resources/Maps/Showcase/"
 showcase_images_path = "F:/World Cup/2018 - Current Cup/Scripts/Resources/Maps/Showcase Images/"
+showcase_replays_path = "F:/World Cup/2018 - Current Cup/Scripts/Resources/Maps/Showcase Replays/"
 script_path = "F:/World Cup/2018 - Current Cup/Scripts/"
 
+#This allows for clearing of the scene if there's nothing to show
 def maps(selected_map):
 
     if selected_map == "None":
@@ -40,8 +45,10 @@ def maps(selected_map):
     else:
         copyfile(f"{maps_path}showcase/{int(selected_map) - 1}_default.png", f"{current_path}showcase_map.png")
 
+#This entire section ensures output of appropriate values into .txt files based on showcase.json
 def values(selected_map):
 
+    #If there are no adjusted values necessary (in None or HD situations) it hides the extra value graphics
     def hide_adjusted():
 
             async def hide_adjusted_2():
@@ -52,6 +59,7 @@ def values(selected_map):
                         obsws.require(SetSourceRenderRequest(source=f"Mappool Showcase Values", render=True, scene_name="Mappool Showcase")),
                         obsws.require(SetSourceRenderRequest(source=f"Mappool Showcase Values HR", render=False, scene_name="Mappool Showcase")),
                         obsws.require(SetSourceRenderRequest(source=f"Mappool Showcase Values DT", render=False, scene_name="Mappool Showcase")),
+                        obsws.require(SetSourceRenderRequest(source=f"Mappool Showcase Values FM", render=False, scene_name="Mappool Showcase")),
                         obsws.require(SetSourceRenderRequest(source=f"Map AR Value Adjusted HR DT", render=False, scene_name="Mappool Showcase")),
                         obsws.require(SetSourceRenderRequest(source=f"Map CS Value Adjusted HR", render=False, scene_name="Mappool Showcase")),
                         obsws.require(SetSourceRenderRequest(source=f"Map HP Value Adjusted HR", render=False, scene_name="Mappool Showcase"))
@@ -66,6 +74,7 @@ def values(selected_map):
 
         hide_adjusted()
 
+    #In case of a map being HR or FM it sets up the scene with the right graphics and pulls the basic values as well as converts them to the HR values
     elif (map_mod_list[int(selected_map) - 1] == "HR") or (map_mod_list[int(selected_map) - 1] == "FM"):
 
         def unhide_adjusted_hr():
@@ -75,6 +84,7 @@ def values(selected_map):
                 await asyncio.sleep(0.01)
                 async with OBSWS("localhost", 4444, "PIqDeb0q7QYCNunQUMyC") as obsws:
                     await asyncio.wait( [
+                        obsws.require(SetSourceRenderRequest(source=f"Mappool Showcase Values FM", render=False, scene_name="Mappool Showcase")),
                         obsws.require(SetSourceRenderRequest(source=f"Mappool Showcase Values HR", render=True, scene_name="Mappool Showcase")),
                         obsws.require(SetSourceRenderRequest(source=f"Mappool Showcase Values", render=False, scene_name="Mappool Showcase")),
                         obsws.require(SetSourceRenderRequest(source=f"Mappool Showcase Values DT", render=False, scene_name="Mappool Showcase")),
@@ -87,6 +97,27 @@ def values(selected_map):
             
             loop = asyncio.get_event_loop()
             loop.run_until_complete(unhide_adjusted_hr_2())
+        
+        def unhide_adjusted_fm():
+
+            async def unhide_adjusted_fm_2():
+
+                await asyncio.sleep(0.01)
+                async with OBSWS("localhost", 4444, "PIqDeb0q7QYCNunQUMyC") as obsws:
+                    await asyncio.wait( [
+                        obsws.require(SetSourceRenderRequest(source=f"Mappool Showcase Values FM", render=True, scene_name="Mappool Showcase")),
+                        obsws.require(SetSourceRenderRequest(source=f"Mappool Showcase Values HR", render=False, scene_name="Mappool Showcase")),
+                        obsws.require(SetSourceRenderRequest(source=f"Mappool Showcase Values", render=False, scene_name="Mappool Showcase")),
+                        obsws.require(SetSourceRenderRequest(source=f"Mappool Showcase Values DT", render=False, scene_name="Mappool Showcase")),
+                        obsws.require(SetSourceRenderRequest(source=f"Map AR Value Adjusted HR DT", render=True, scene_name="Mappool Showcase")),
+                        obsws.require(SetSourceRenderRequest(source=f"Map CS Value Adjusted HR", render=True, scene_name="Mappool Showcase")),
+                        obsws.require(SetSourceRenderRequest(source=f"Map HP Value Adjusted HR", render=True, scene_name="Mappool Showcase"))
+                    ] )
+            
+            unhide_adjusted_fm_2()
+            
+            loop = asyncio.get_event_loop()
+            loop.run_until_complete(unhide_adjusted_fm_2())
 
         with open(f"{current_path}map_value_ar.txt", "w") as value:
             value.write(map_ar_list[int(selected_map) - 1])
@@ -126,8 +157,13 @@ def values(selected_map):
         with open(f"{current_path}map_value_bpm.txt", "w") as value:
             value.write(str("%.0f" % rounded_bpm))
         
-        unhide_adjusted_hr()
+        if map_mod_list[int(selected_map) - 1] == "HR":
+            unhide_adjusted_hr()
+        
+        if map_mod_list[int(selected_map) - 1] == "FM":
+            unhide_adjusted_fm()
 
+    #In case of a map being DT it sets up the scene with the right graphics and pulls the basic values as well as converts them to the DT values
     elif map_mod_list[int(selected_map) - 1] == "DT":
 
         def unhide_adjusted_dt():
@@ -137,6 +173,7 @@ def values(selected_map):
                 await asyncio.sleep(0.01)
                 async with OBSWS("localhost", 4444, "PIqDeb0q7QYCNunQUMyC") as obsws:
                     await asyncio.wait( [
+                        obsws.require(SetSourceRenderRequest(source=f"Mappool Showcase Values FM", render=False, scene_name="Mappool Showcase")),
                         obsws.require(SetSourceRenderRequest(source=f"Mappool Showcase Values DT", render=True, scene_name="Mappool Showcase")),
                         obsws.require(SetSourceRenderRequest(source=f"Mappool Showcase Values", render=False, scene_name="Mappool Showcase")),
                         obsws.require(SetSourceRenderRequest(source=f"Mappool Showcase Values HR", render=False, scene_name="Mappool Showcase")),
@@ -185,6 +222,7 @@ def values(selected_map):
 
         unhide_adjusted_dt()
 
+    #Pulls all data in case it's Nomod or HD and displays the base values
     else:
 
         hide_adjusted()
@@ -211,17 +249,38 @@ def values(selected_map):
         with open(f"{current_path}map_value_hp.txt", "w") as value:
             value.write(map_hp_list[int(selected_map) - 1])
 
-#Runs bans()
 def multi_btn():
 
     maps(selected_map.get())
 
     values(selected_map.get())
 
+    #Runs each .osr based on script input rather than added manual input 
+    if selected_map.get() != "None":
+
+        os.chdir('F:\\World Cup\\2018 - Current Cup\\Scripts\\Resources\\Maps\\Showcase Replays')
+        os.system(f'"F:\\World Cup\\2018 - Current Cup\\Scripts\\Resources\\Maps\\Showcase Replays\\{int(selected_map.get())}.osr"')
+
+#Pulls all jpg images in <diffID>.jpg format from the full cover links in the .json
 def image_btn():
 
-    for count in range(0, map_amount):
-        urllib.request.urlretrieve(map_jpg_list[count - 1], f"{showcase_images_path}{map_diff_id_list[count - 1]}.jpg")
+    i = 0
+    for count in range(0, map_amount - 1):
+        if map_jpg_list[count - 1].endswith("jpg?0"):
+            copyfile(f"{maps_path}replacement.png", f"{mappool_cards}{i + 1}.png")
+        else:
+            urllib.request.urlretrieve(map_jpg_list[count], f"{mappool_cards}{i + 1}.png")
+        i += 1
+    
+    i = 0
+    for count in range(0, map_amount - 1):
+        basewidth = 940
+        img = Image.open(f"{mappool_cards}{i + 1}.png")
+        wpercent = (basewidth / float(img.size[0]))
+        hsize = int((float(img.size[1])*float(wpercent)))
+        img = img.resize((basewidth,hsize), Image.ANTIALIAS)
+        img.save(f"{mappool_cards}{i + 1}.png")
+        i += 1
 
 #map_amount = int(input("Mappool size?:\n"))
 
@@ -242,7 +301,8 @@ map_hp_list = []
 with open(f"{script_path}showcase.json") as file:
     showcase_data = json.load(file)
 
-for maps_amount in showcase_data["mappool"]:
+#Assigns all .json values to lists to later loop through
+for maps_amount in showcase_data:
     map_list.append(maps_amount["map_number"])
     map_diff_id_list.append(maps_amount["diff_id"])
     map_jpg_list.append(maps_amount["mapset_jpg"])
