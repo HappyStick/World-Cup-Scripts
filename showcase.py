@@ -266,7 +266,7 @@ def image_btn():
 
     i = 0
     for count in range(0, map_amount - 1):
-        if map_jpg_list[count - 1].endswith("jpg?0"):
+        if map_jpg_list[count].endswith("jpg?0"):
             copyfile(f"{maps_path}replacement.png", f"{mappool_cards}{i + 1}.png")
         else:
             urllib.request.urlretrieve(map_jpg_list[count], f"{mappool_cards}{i + 1}.png")
